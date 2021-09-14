@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CliffordLabs</string>
+    <string name="hello_message">Hello World</string>
+    <string name="button_messsage">I am a Button</string>
 </resources>
