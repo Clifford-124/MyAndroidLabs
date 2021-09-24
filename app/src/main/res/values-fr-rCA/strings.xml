@@ -3,4 +3,15 @@
     <string name="app_name">CliffordLabs</string>
     <string name="hello_message">Bonjour tout le monde</string>
     <string name="button_messsage">Je suis le button</string>
+    <string name="editmessage">Edit moi</string>
+    <string name="hinttext">Ecrit ici</string>
+
+
+    <string name="switch_text">The Switch is now </string>
+    <string name="checkbox_text">The checkbox is now </string>
+    <string name="switch_on">on</string>
+    <string name="switch_off">off</string>
+    <string name="checkbox_on">checked</string>
+    <string name="checkbox_off">unchecked</string>
+    <string name="toast_message">toastmessage</string>
 </resources>
