@@ -1,6 +1,9 @@
-<resources>
-    <string name="app_name">CliffordLabs</string>
-    <string name="hello_message">Hello World</string>
-    <string name="button_messsage">I am a Button</string>
-    <string name="spin_message">Spin flag</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name" translatable="false">CliffordLabs</string>
+    <string name="hello_message" tools:ignore="MissingTranslation">Hello World</string>
+    <string name="button_messsage" tools:ignore="MissingTranslation">I am a Button</string>
+    <string name="spin_message" tools:ignore="MissingTranslation">Spin flag</string>
+    <string name="button1" translatable="false">Button 1</string>
+    <string name="button2" translatable="false">Button 2</string>
+    <string name="button3" translatable="false">Button 3</string>
 </resources>
