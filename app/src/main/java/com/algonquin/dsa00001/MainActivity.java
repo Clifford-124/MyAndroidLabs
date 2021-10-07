@@ -25,18 +25,19 @@ public class MainActivity extends AppCompatActivity {
 
         final EditText emailAddress = (EditText) findViewById(R.id.email_address);
         final SharedPreferences prefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
-        String value = prefs.getString("loginName", "null");
+        String value = prefs.getString("loginName", "");
         Toast.makeText(MainActivity.this, "result 0 is :" + value, Toast.LENGTH_LONG).show();
 
 
-            emailAddress.setText(value);
-            emailAddressToString = emailAddress.getText().toString();
-            Toast.makeText(MainActivity.this, "result 2 is :" + emailAddressToString, Toast.LENGTH_LONG).show();
+        emailAddress.setText(value);
+        emailAddressToString = emailAddress.getText().toString();
+        Toast.makeText(MainActivity.this, "result 2 is :" + emailAddressToString, Toast.LENGTH_LONG).show();
 
         Button loginButton = (Button) findViewById(R.id.login_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                emailAddressToString = emailAddress.getText().toString();
                 SharedPreferences.Editor editor = prefs.edit();
                 //editor.putString("loginName", "cliffiswatching@tv.ca");
                 editor.putString("loginName", emailAddressToString);
