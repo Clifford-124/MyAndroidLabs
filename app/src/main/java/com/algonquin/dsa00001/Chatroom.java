@@ -9,15 +9,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.IOException;
+import com.google.android.material.snackbar.Snackbar;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,8 +31,9 @@ public class Chatroom extends AppCompatActivity {
     private Button receiveButtton;
     private EditText textbox;
     private Context context;
-    public static final int SEND = 1;
-    public static final int RECEIVE = 2;
+    int SEND = 1;
+    int RECEIVE = 2;
+    private MyChatAdapter adt;
 
 
     @Override
@@ -45,41 +46,36 @@ public class Chatroom extends AppCompatActivity {
         receiveButtton = (Button) findViewById(R.id.receive_button);
 
         chatList = (RecyclerView) findViewById(R.id.recycler_view);
+
         chatList.setLayoutManager(new LinearLayoutManager(this));
 
 
-        MyChatAdapter adp = new MyChatAdapter(context, messages);
-        chatList.setAdapter(adp);
+        adt = new MyChatAdapter(context, messages);
+        chatList.setAdapter(adt);
 
         sendButtton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
-                //String currentDateandTime = sdf.format(new Date());
+                SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd-MMM-yyyy hh-mm-ss a", Locale.getDefault());
+                String currentDateandTime = sdf.format(new Date());
 
-                ChatMessage thisMessage = new ChatMessage(textbox.getText().toString(), SEND, sdf);
+                ChatMessage thisMessage = new ChatMessage(textbox.getText().toString(), SEND, currentDateandTime);
                 messages.add(thisMessage);
-                adp.notifyDataSetChanged();
-                //adp.notifyItemInserted(messages.size() - 1);
+                adt.notifyItemInserted(messages.size() - 1);
                 textbox.setText(""); // clear the text content
-
-                Log.d("Chatroom", "onSend clicked");
-                Log.d("Chatroom", "onSend clicked + message size :" + messages.size());
-
             }
         });
 
         receiveButtton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+                SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd-MMM-yyyy hh-mm-ss a", Locale.getDefault());
                 String currentDateandTime = sdf.format(new Date());
-                ChatMessage thisMessage = new ChatMessage(textbox.getText().toString(), 2, sdf);
-                textbox.setText(""); // clear the text content
+                ChatMessage thisMessage = new ChatMessage(textbox.getText().toString(), 2, currentDateandTime);
                 messages.add(thisMessage);
-                adp.notifyDataSetChanged();
-
+                adt.notifyItemInserted(messages.size() - 1);
+                textbox.setText(""); // clear the text content
                 Log.d("Chatroom", "onReceive clicked");
             }
         });
@@ -90,18 +86,49 @@ public class Chatroom extends AppCompatActivity {
 
         TextView messageText;
         TextView timeText;
+        int position;
 
         public MyRowViews(View itemView) {
             super(itemView);
 
+            itemView.setOnClickListener(click -> {
+                this.position = getAbsoluteAdapterPosition();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(Chatroom.this);
+                builder.setMessage("Do you want to delete the message:" + messageText.getText());
+                builder.setTitle("Question:");
+                builder.setNegativeButton("No", (dialog, cl) -> {
+                });
+                builder.setPositiveButton("Yes", (dialog, cl) -> {
+
+                    ChatMessage removedMessage = messages.get(position);
+                    messages.remove(position);
+                    adt.notifyItemRemoved(position);
+
+                    Snackbar.make(messageText, "You deleted message #" + position, Snackbar.LENGTH_LONG)
+                            .setAction("UNDO", clk -> {
+
+                                messages.add(position, removedMessage);
+                                adt.notifyItemInserted(position);
+
+                            })
+                            .show();
+                }).create().show();
+
+            });
+
             messageText = itemView.findViewById(R.id.message);
             timeText = itemView.findViewById(R.id.time);
+        }
+
+        int setPosition(int pos) {
+            return position;
         }
     }
 
     public class MyChatAdapter extends RecyclerView.Adapter<MyRowViews> {
         Context context;
-        ArrayList<ChatMessage> messages = new ArrayList<>();
+        ArrayList<ChatMessage> messages;
 
         @Override
         public MyRowViews onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -112,7 +139,8 @@ public class Chatroom extends AppCompatActivity {
                 layoutID = R.layout.sent_message;
             else
                 layoutID = R.layout.receive_layout;
-            View loadedRow = inflater.inflate(layoutID, parent, false);
+
+            View loadedRow = inflater.inflate(layoutID, parent, false); //View loadedRow = inflater.inflate(R.layout.receive_layout, parent, false);
             MyRowViews initRow = new MyRowViews(loadedRow);
             return initRow;
         }
@@ -121,17 +149,15 @@ public class Chatroom extends AppCompatActivity {
         public int getItemViewType(int position) {
             ChatMessage thisRow = messages.get(position);
             int request = thisRow.getSendOrReceive();
-            //int request = messages.get(position).getSendOrReceive();
-            Log.d("Chatroom", "View type: " + request);
             switch (request) {
-                case SEND:
-                    Log.d("Chatroom", "View 1");
+                case 1:
+                    Log.d("getItemViewType", "View 1");
                     return 1;
-                case RECEIVE:
-                    Log.d("Chatroom", "View 2");
+                case 2:
+                    Log.d("getItemViewType", "View 2");
                     return 2;
                 default:
-                    return 1 ;
+                    return -1;
             }
         }
 
@@ -142,17 +168,15 @@ public class Chatroom extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(MyRowViews holder, int position) {
-
             holder.messageText.setText(messages.get(position).getMessage());
             holder.timeText.setText(messages.get(position).getTimeSent());
-
+            holder.setPosition(position);
             Log.d("MyChatAdapter", "onBindViewHolder evoked");
-
         }
 
         @Override
         public int getItemCount() {
-            Log.d("Chatroom", "MyChatAdapter+ message size :" + messages.size());
+            Log.d("Chatroom", "MyChatAdapter + message size :" + messages.size());
             return messages.size();
         }
     }
@@ -162,10 +186,10 @@ public class Chatroom extends AppCompatActivity {
         int sendOrReceive;
         String timeSent;
 
-        public ChatMessage(String messageString, int request, SimpleDateFormat time) {
+        public ChatMessage(String messageString, int request, String time) {
             this.message = messageString;
             this.sendOrReceive = request;
-            this.timeSent = time.format(new Date());
+            this.timeSent = time;
         }
 
         public String getMessage() {
@@ -191,9 +215,6 @@ public class Chatroom extends AppCompatActivity {
 
         public void setTimeSent(String timeSent) {
             this.timeSent = timeSent;
-        } // alt: Date
-
-
+        }
     }
-
 }

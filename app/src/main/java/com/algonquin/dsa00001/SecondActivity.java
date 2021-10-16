@@ -29,7 +29,7 @@ import java.io.IOException;
 public class SecondActivity extends AppCompatActivity {
 
     private ImageView profileImage;
-    private String filename = "Picture.png";
+    private String filename = "picture.jpg";
     Bitmap thumbnail;
 
 
@@ -42,6 +42,13 @@ public class SecondActivity extends AppCompatActivity {
         String emailAddress = fromPrevious.getStringExtra("EmailAddress");
         TextView headerText = (TextView) findViewById(R.id.header_text);
         headerText.setText("Welcome back " + emailAddress);
+
+        File file = new File(getFilesDir(), filename);
+        if(file.exists()){
+            Bitmap theImage = BitmapFactory.decodeFile(file.getAbsolutePath()); // <---
+            profileImage.setImageBitmap(theImage);
+            Toast.makeText(this, "This file already exist :" + filename, Toast.LENGTH_LONG).show();
+        }
 
         final EditText phoneNumber = (EditText) findViewById(R.id.phone_number);
         Button callNumber = (Button) findViewById(R.id.call_button);
@@ -67,12 +74,6 @@ public class SecondActivity extends AppCompatActivity {
 
 
 
-        File file = new File(getFilesDir(), filename);
-        if(file.exists()){
-            Bitmap theImage = BitmapFactory.decodeFile(filename);
-            profileImage.setImageBitmap(theImage);
-            Toast.makeText(this, "This file already exist :" + filename, Toast.LENGTH_LONG).show();
-        }
     }
 
 
