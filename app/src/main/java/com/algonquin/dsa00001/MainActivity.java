@@ -1,81 +1,123 @@
 package com.algonquin.dsa00001;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+/**
+ * @author Clifford Dsa
+ * @version 1.0
+ *
+ */
 public class MainActivity extends AppCompatActivity {
 
-    private static String TAG = "MainActivity";
-    private String emailAddressToString;
+    /** This holds the text at the center of the screen*/
+    private TextView tv = null;
+    /** This holds input box at the center of the screen*/
+    private EditText et = null;
+    /** This holds the button at the center of the screen*/
+    private Button bt = null;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.w(TAG, "onCreate() - Loading Widgets");
 
-        final EditText emailAddress = (EditText) findViewById(R.id.email_address);
-        final SharedPreferences prefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
-        String value = prefs.getString("loginName", "");
-        Toast.makeText(MainActivity.this, "result 0 is :" + value, Toast.LENGTH_LONG).show();
+        tv = findViewById(R.id.textView);
+        et = findViewById(R.id.editText);
+        bt = findViewById(R.id.button);
 
-
-        emailAddress.setText(value);
-        emailAddressToString = emailAddress.getText().toString();
-        Toast.makeText(MainActivity.this, "result 2 is :" + emailAddressToString, Toast.LENGTH_LONG).show();
-
-        Button loginButton = (Button) findViewById(R.id.login_button);
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                emailAddressToString = emailAddress.getText().toString();
-                SharedPreferences.Editor editor = prefs.edit();
-                //editor.putString("loginName", "cliffiswatching@tv.ca");
-                editor.putString("loginName", emailAddressToString);
-                editor.apply();
-
-                Intent nextPage = new Intent(MainActivity.this, SecondActivity.class);
-                nextPage.putExtra("EmailAddress", emailAddressToString);
-                startActivity(nextPage);
-            }
+        bt.setOnClickListener( clk -> {
+            String password = et.getText().toString();
+            if(checkPasswordComplexity(password))
+                tv.setText("Your password meets the requirements");
+            else
+                tv.setText("You shall not pass!");
         });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.w(TAG, "onStart() -The application is now visible on screen");
+    /**
+     * This function checks if string has an upper case letter,
+     * a lower case letter, a number, and a special symbol (#$%^&*!@?)
+     *
+     * @param pw The String object that we are checking
+     * @return Returns true if string matches criteria
+     */
+    private boolean checkPasswordComplexity(String pw) {
+        boolean foundUpperCase, foundLowerCase, foundNumber, foundSpecial;
+        foundUpperCase = foundLowerCase = foundNumber = foundSpecial = false;
+
+        for (int i = 0; i < pw.length(); i++) {
+
+            if(Character.isUpperCase(pw.charAt(i)))
+                foundUpperCase = true;
+
+            if(Character.isLowerCase(pw.charAt(i)))
+                foundLowerCase = true;
+
+            if (Character.isDigit(pw.charAt(i)))
+                foundNumber = true;
+
+            if (isSpecialCharacter(pw.charAt(i)))
+                foundSpecial = true;
+
+        }
+
+        if(!foundUpperCase)
+            Toast.makeText(this, "Your password does not have an upper case letter", Toast.LENGTH_SHORT).show();
+
+        if(!foundLowerCase)
+            Toast.makeText(this, "Your password does not have a lower case letter", Toast.LENGTH_SHORT).show();
+
+        if(!foundNumber)
+            Toast.makeText(this, "Your password does not have a number", Toast.LENGTH_SHORT).show();
+
+        if(!foundSpecial)
+            Toast.makeText(this, "Your password does not have a special character", Toast.LENGTH_SHORT).show();
+
+        if(foundUpperCase == true & foundLowerCase == true & foundNumber == true & foundSpecial == true) {
+            return true;
+        }
+        return false;
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.w(TAG, "onResume() - The application is now responding to user input");
+    /**
+     * This function checks if character
+     * matches the specified symbols
+     *
+     * @param c The character object that we are checking
+     * @return Returns true if character matches symbol
+     */
+    boolean isSpecialCharacter(char c)
+    {
+        switch (c){
+            case '#':
+                return true;
+            case '$':
+                return true;
+            case '%':
+                return true;
+            case '^':
+                return true;
+            case '&':
+                return true;
+            case '*':
+                return true;
+            case '!':
+                return true;
+            case '@':
+                return true;
+            case '?':
+                return true;
+            default:
+                return false;
+        }
     }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.w(TAG, "onPause() - The application is now partially visible to user ");
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.w(TAG, "onDestroy() - The application is now dismissed and in background ");
-    }
-
-
 }
