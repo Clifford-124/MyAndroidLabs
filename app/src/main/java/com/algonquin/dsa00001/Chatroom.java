@@ -37,6 +37,7 @@ public class Chatroom extends AppCompatActivity {
     int SEND = 1;
     int RECEIVE = 2;
     private MyChatAdapter adt;
+    private SQLiteDatabase db;
 
 
     @Override
@@ -49,7 +50,7 @@ public class Chatroom extends AppCompatActivity {
         receiveButtton = (Button) findViewById(R.id.receive_button);
 
         MyOpenHelper opener = new MyOpenHelper(getApplicationContext());
-        SQLiteDatabase db = opener.getWritableDatabase();
+        db = opener.getWritableDatabase();
         Cursor results = db.rawQuery("Select * FROM " + MyOpenHelper.TABLE_NAME + ";", null);
 
         int _idCol = results.getColumnIndex("_id");
@@ -138,8 +139,15 @@ public class Chatroom extends AppCompatActivity {
                     messages.remove(position);
                     adt.notifyItemRemoved(position);
 
+                    db.delete(MyOpenHelper.TABLE_NAME, "_id=?", new String[] {Long.toString(removedMessage.getId())});
+
                     Snackbar.make(messageText, "You deleted message #" + position, Snackbar.LENGTH_LONG)
                             .setAction("UNDO", clk -> {
+
+                                db.execSQL("INSERT INTO " + MyOpenHelper.TABLE_NAME + " values('" + removedMessage.getId() +
+                                        "','" + removedMessage.getMessage() +
+                                        "','" + removedMessage.getSendOrReceive() +
+                                        "','" + removedMessage.getTimeSent() + "');");
 
                                 messages.add(position, removedMessage);
                                 adt.notifyItemInserted(position);
