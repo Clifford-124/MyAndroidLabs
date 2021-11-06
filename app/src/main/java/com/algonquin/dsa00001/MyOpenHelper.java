@@ -13,20 +13,19 @@ public class MyOpenHelper extends SQLiteOpenHelper {
     public static final String col_send_receive = "SendOrReceive";
     public static final String col_time_sent = "TimeSent";
 
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + TABLE_NAME + " ( _id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + col_message + " TEXT,"
+                + col_send_receive + " INTEGER,"
+                + col_time_sent + " TEXT)");
+    }
+
     public MyOpenHelper(Context context) {
         super(context, name, null, version);
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL("Create table " + TABLE_NAME + "(_id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + col_message + "TEXT,"
-                + col_send_receive + "INTEGER,"
-
-                /* more colums here: */
-
-                + col_time_sent + "TEXT);");
-    }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
