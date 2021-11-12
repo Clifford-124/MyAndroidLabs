@@ -13,4 +13,6 @@
     <string name="input_hint_text" translatable="false">Enter here</string>
     <string name="send_button_label">SEND</string>
     <string name="receive_button_label">RECEIVE</string>
+    <string name="delete_button_label">DELETE</string>
+    <string name="close_button_label">CLOSE</string>
 </resources>
