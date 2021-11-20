@@ -11,10 +11,18 @@
         <entry key="..\:/Users/user/AndroidStudioProjects/CliffordLabs/app/src/main/res/layout/chatlayout.xml" value="0.18" />
         <entry key="..\:/Users/user/AndroidStudioProjects/CliffordLabs/app/src/main/res/layout/receive_layout.xml" value="0.25" />
         <entry key="..\:/Users/user/AndroidStudioProjects/CliffordLabs/app/src/main/res/layout/sent_message.xml" value="0.22" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyAndroidLabs/app/src/main/res/drawable/btn_thin_outline_unfilled.xml" value="0.165234375" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyAndroidLabs/app/src/main/res/drawable/button_text_color.xml" value="0.165234375" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyAndroidLabs/app/src/main/res/layout-sw600dp/empty_layout.xml" value="0.1" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyAndroidLabs/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyAndroidLabs/app/src/main/res/layout/activity_second.xml" value="0.25" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyAndroidLabs/app/src/main/res/layout/activity_weather.xml" value="0.153125" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyAndroidLabs/app/src/main/res/layout/chatlayout.xml" value="0.16510416666666666" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyAndroidLabs/app/src/main/res/layout/details_layout.xml" value="0.18" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyAndroidLabs/app/src/main/res/layout/empty_layout.xml" value="0.12" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyAndroidLabs/app/src/main/res/layout/forecast_dialog.xml" value="0.153125" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyAndroidLabs/app/src/main/res/layout/network_connection_dialog.xml" value="0.153125" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyAndroidLabs/app/src/main/res/layout/receive_layout.xml" value="0.153125" />
       </map>
     </option>
   </component>

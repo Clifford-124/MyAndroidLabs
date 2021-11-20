@@ -2,6 +2,7 @@ package com.algonquin.dsa00001;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ public class MessageListFragment extends Fragment {
     private RecyclerView chatList;
     private Button sendButtton;
     private Button receiveButtton;
+    private Button weatherButtton;
     private EditText textbox;
     private Context context;
     int SEND = 1;
@@ -53,6 +55,15 @@ public class MessageListFragment extends Fragment {
         textbox = (EditText) chatLayout.findViewById(R.id.text_box);
         sendButtton = (Button) chatLayout.findViewById(R.id.send_button);
         receiveButtton = (Button) chatLayout.findViewById(R.id.receive_button);
+
+        //Weather activity
+        weatherButtton = chatLayout.findViewById(R.id.weather_button);
+        weatherButtton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), weather.class));
+            }
+        });
 
         MyOpenHelper opener = new MyOpenHelper(getContext());
         db = opener.getWritableDatabase();
