@@ -1,12 +1,15 @@
 package com.algonquin.dsa00001;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,12 +19,16 @@ public class MainActivity extends AppCompatActivity {
 
     private static String TAG = "MainActivity";
     private String emailAddressToString;
+    private Toolbar myToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.w(TAG, "onCreate() - Loading Widgets");
+
+        myToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
 
         final EditText emailAddress = (EditText) findViewById(R.id.email_address);
         final SharedPreferences prefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
@@ -48,6 +55,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(nextPage);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_activity_actions, menu);
     }
 
     @Override
